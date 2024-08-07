@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabbed Content Example</title>
+<link rel="stylesheet" href="tabsstyles.css">
+  
+</head>
+<body>
+
+<div class="tab-container">
+    <button class="tablink" onclick="openTab(event, 'tab1')" style="background-color: #00ffff;">G-Meet</button>
+    <button class="tablink" onclick="openTab(event, 'tab2')" style="background-color: #00ffff;">Tab 2</button>
+    <button class="tablink" onclick="openTab(event, 'tab3')" style="background-color: #00ffff;">Tab 3</button>
+    <button class="tablink" onclick="openTab(event, 'tab4')" style="background-color: #00ffff;">Tab 4</button>
+
+   <div id="tab1" class="tabcontent">
+        <!-- Content of Tab 1 -->
+        <iframe src="googlemeetpage.html" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+    <div id="tab2" class="tabcontent">
+        <!-- Content of Tab 2 -->
+        <iframe src="googlemapspage.html" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+    <div id="tab3" class="tabcontent">
+        <!-- Content of Tab 3 -->
+        <iframe src="googledrivepage.html" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+    <div id="tab4" class="tabcontent">
+        <!-- Content of Tab 4 -->
+        <iframe src="googlecalendarpage.html" width="100%" height="600" frameborder="0"></iframe>
+    </div>
+   
+</div>
+
+<script src="scripts.js"></script>
+</body>
+</html>

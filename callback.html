@@ -1,0 +1,264 @@
+<!-- callback.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Callback</title>
+
+    <!-- CSS Styles -->
+    <style>
+        /* Styling for the email list container */
+        .email-list {
+            position: fixed; /* Fixes the position relative to the viewport */
+            top: 10px; /* Distance from the top of the viewport */
+            right: 70px; /* Distance from the right edge of the viewport */
+            background-color: #ddfcf7;
+            padding: 10px;
+            border: 1px solid #ccc;
+            max-width: 450px; /* Limiting the width of the list */
+            overflow-y: auto; /* Adding scrollbars if content exceeds max-height */
+            max-height: 80vh; /* Limiting the height to 80% of viewport height */
+            width: 250px;
+        }
+
+        /* Styling for the list items inside email list */
+        .email-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .email-list ul li {
+            margin-bottom: 5px;
+        }
+
+        /* Additional styling for the textarea and main content area */
+        .main-content {
+            margin-top: 50px; /* Ensuring content is below email list */
+            margin-left: 10px; /* Margin from the left edge */
+        }
+    </style>
+    <style>
+        .frame {
+            border: 2px solid black;
+            padding: 10px;
+            margin: 5px 10px;
+            display: inline-block;
+        }
+    </style>
+     <style>
+        #messageFrame {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background-color: #f0f0f0;
+            width: 400px;
+            margin: auto 20px 20px 20px;
+        }  
+         /* Styling for the button */
+#ContactsButton {
+    position: fixed; /* Fixes the position relative to the viewport */
+    top: 10px; /* Distance from the top of the viewport */
+    right: 70px; /* Distance from the right edge of the viewport */
+    z-index: 999; /* Ensure button is on top of other content */
+}
+
+    </style>
+    
+</head>
+<body>  
+         <script>  
+    <!-- OAuth Callback Handling -->     
+        function fetchToken(code) {
+            const tokenUrl = 'https://oauth2.googleapis.com/token';
+            const clientId = '919212619443-d2ck4cv25sfhvvg5n1rj82ob81h56362.apps.googleusercontent.com'; 
+            const clientSecret = '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'; 
+            const redirectUri = 'https://engineerr1983.github.io/hello-world-page/callback';
+
+            const requestBody = {
+                code: code,
+                client_id: clientId,
+                client_secret: clientSecret,
+                redirect_uri: redirectUri,
+                grant_type: 'authorization_code'
+            };
+
+            fetch(tokenUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const accessToken = data.access_token;
+                console.log('Access token:', accessToken);
+                localStorage.setItem('accessToken', accessToken);
+                
+                                    
+                // Optional: Store refresh token if provided
+                const refreshToken = data.refresh_token;
+                if (refreshToken) {
+                    localStorage.setItem('refreshToken', refreshToken);
+                }
+            })
+            .catch(error => {
+                console.error('Error exchanging code for token:', error);
+            });
+        }
+
+    </script>
+
+    <script>
+
+
+  // Check for OAuth callback and handle it
+        if (window.location.pathname === '/hello-world-page/callback') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            fetchToken(code); // Function to exchange code for access token
+        }        
+    </script>
+
+    <!-- Email Sending Section -->
+
+      <!-- Email List Container -->
+    <div class="email-list">
+        <p><strong><h2>Valid Contacts:</h2></strong> </p> 
+        <ul id="validEmailList"></ul>
+    </div>
+    <button id="ContactsButton"><h4>Contacts</h4></button> 
+<script src="populatewithcontacts.js"></script>
+     <script>
+        document.getElementById('ContactsButton').addEventListener('click', function() {
+           populateEmailList();
+            this.disabled = true;
+        });
+    </script>
+   
+    
+<h2 style="background-color: #ddfcf7; width: fit-content;font-family:Trebuchet MS,sans-serif;">Send Email</h2>
+     <div class="frame">
+    <label for="receiverEmail"><h3 style="background-color: #ddfcf7; width: fit-content;font-family:helvetica,sans-serif;"> Receiver's Email:</h3></label>
+    <input type="email" id="receiverEmail" name="receiverEmail" placeholder="Enter Receiver's email here.." style="height: 30px; width: 300px;" required>
+   
+         <script>
+        // Get references to the button and input field
+        const button = document.getElementById('ContactsButton');
+        const inputField = document.getElementById('receiverEmail');
+
+        // Function to toggle the disabled state
+        function toggleInputField() {
+            inputField.disabled = !inputField.disabled;
+        }
+
+        // Add an event listener to the button to call the function on click
+        button.addEventListener('click', toggleInputField);
+
+        // Optionally set the initial state of the input field if needed
+        inputField.disabled = true; // or false if you want it enabled initially
+    </script>
+         
+         <script src="populatingreceiveremail.js"></script>
+    <label for="messageBody"><h3 style="background-color: #ddfcf7; width: fit-content;font-family:helvetica,sans-serif;">Message Body:</h3></label>
+    <textarea id="messageBody" name="messageBody" rows="12" cols="80" placeholder="Enter your message here.." required></textarea>
+    <br>
+    <button id="sendEmailButton"><h3>Send Email</h3></button>
+          </div>
+       <div id="messageFrame">
+     
+    </div>
+    <script>messageFrame.style.display = 'none';</script>
+     <script src="script1.js"></script>
+    <script src="clearscript.js"></script>
+    <script>
+        document.getElementById('sendEmailButton').addEventListener('click', function() {
+            clearFields();
+        });
+    </script>
+
+ <script>
+
+     function showMessage3(message) {
+    // Create a new <div> element
+    var div = document.createElement('div');
+    
+    // Set the text content of the <div> to the message
+    div.textContent = message;
+    
+    // Optionally, you can style the <div> to make it more noticeable
+    div.style.backgroundColor = '#ffffc5';
+    div.style.color = '#004085';
+    div.style.border = '1px solid #b8daff';
+    div.style.padding = '10px';
+    div.style.margin = '6px';
+    div.style.fontSize = '1.15em';
+    div.style.width = 'fit-content';
+    
+    
+    // Append the <div> to the document body or another element where you want to display the message
+     // Return the created div
+    return div;
+   }
+   // Create a container div to hold the messages
+var container = document.createElement('div');
+// Display the first message
+var message3 = showMessage3('Click (Contacts) button to load your contacts list..');
+container.appendChild(message3);
+
+        // Get the message frame container
+var messageFrame = document.getElementById('messageFrame');
+
+// Append the container div with messages to the message frame
+messageFrame.appendChild(container);
+
+         // Show the message frame container
+    messageFrame.style.display = 'block';
+
+
+            // Automatically remove the message after 4 seconds
+    setTimeout(function() {
+        container.remove();
+          messageFrame.style.display = 'none';
+    }, 4500); // 4000 milliseconds = 4 seconds
+     
+ </script>
+
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+   <a href="https://engineerr1983.github.io/hello-world-page/pagewithtabs.html" style="flex-grow: 1;">
+        <h2>
+            <p id="colorText" style="text-align: center;">
+                Google (Meet / Maps / Drive / Calendar)
+                <br>Click for more...
+            </p>
+        </h2>
+    </a>
+
+  <script>
+    // JavaScript for color change
+    const colors = ['red', 'blue', 'green', 'orange', 'purple', 'black'];
+    let currentColorIndex = 0;
+
+    function changeColor() {
+        const element = document.getElementById('colorText');
+        element.style.color = colors[currentColorIndex];
+        currentColorIndex = (currentColorIndex + 1) % colors.length;
+    }
+
+    // Change color every 1 second
+    setInterval(changeColor, 1000);
+</script>
+
+     
+        <button id="signout2" style="height: 35px;display: flex; align-items: center; justify-content: center;"><h3>Sign out</h3></button>
+    </div>
+     <script>
+    document.getElementById('signout2').addEventListener('click', function() {
+       window.top.location.href = 'loginscreen.html';
+    });
+  </script>
+    
+</body>
+</html>
