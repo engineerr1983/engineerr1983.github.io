@@ -18,15 +18,20 @@
   function requestNotificationPermission() {
     return new Promise((resolve, reject) => {
       if (Notification.permission === 'granted') {
+        console.log('Notification permission already granted');
         resolve();
       } else if (Notification.permission === 'denied') {
+        console.log('Notification permission denied');
         reject('Notification permission denied');
       } else {
+        console.log('Requesting notification permission');
         Notification.requestPermission()
           .then(permission => {
             if (permission === 'granted') {
+              console.log('Notification permission granted');
               resolve();
             } else {
+              console.log('Notification permission not granted');
               reject('Notification permission not granted');
             }
           });
@@ -52,10 +57,13 @@
   // Show subscription prompt to the user
   function showSubscriptionPrompt() {
     return new Promise((resolve, reject) => {
+      console.log('Showing subscription prompt');
       const userConfirmed = confirm('Would you like to receive notifications from this app?');
       if (userConfirmed) {
+        console.log('User agreed to subscribe');
         resolve();
       } else {
+        console.log('User declined subscription');
         reject('User declined subscription');
       }
     });
@@ -83,6 +91,7 @@
   // Call setupNotifications when the page loads or when you want to initialize notifications
   setupNotifications();
 </script>
+
 
 </head>
 <body onload="checkList()">
